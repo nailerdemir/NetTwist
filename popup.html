@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetTwist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --danger-color: #f43f5e;
+            --warning-color: #fb923c;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-normal: all 0.3s ease;
+        }
+        
+        body {
+            width: 350px;
+            min-height: 300px;
+            padding: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+        }
+        
+        .popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .popup-logo {
+            width: 36px;
+            height: 36px;
+            margin-right: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 6px -1px rgba(67, 97, 238, 0.3);
+        }
+        
+        .popup-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        
+        .popup-subtitle {
+            color: #64748b;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: var(--transition-normal);
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 12px 15px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border-bottom: none;
+        }
+        
+        .card-header h5 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .card-body {
+            padding: 15px;
+        }
+        
+        .rule-item {
+            background-color: #f8fafc;
+            border-left: 3px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            transition: var(--transition-normal);
+        }
+        
+        .rule-item:hover {
+            background-color: #f1f5f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .rule-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .rule-endpoint {
+            font-size: 0.9rem;
+            color: #475569;
+            word-break: break-all;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.3px;
+        }
+        
+        .bg-success {
+            background-color: var(--success-color) !important;
+        }
+        
+        .bg-danger {
+            background-color: var(--danger-color) !important;
+        }
+        
+        .bg-warning {
+            background-color: var(--warning-color) !important;
+        }
+        
+        .bg-info {
+            background-color: var(--accent-color) !important;
+        }
+        
+        .bg-secondary {
+            background-color: #94a3b8 !important;
+        }
+        
+        .btn {
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: var(--transition-normal);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px -1px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .form-check-input {
+            cursor: pointer;
+            width: 1.2em;
+            height: 1.2em;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-check-label {
+            cursor: pointer;
+        }
+        
+        .no-rules {
+            text-align: center;
+            color: #64748b;
+            padding: 20px 0;
+        }
+        
+        .no-rules i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #94a3b8;
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        .rule-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+        }
+        
+        .status-active {
+            background-color: var(--success-color);
+        }
+        
+        .status-error {
+            background-color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-header fade-in">
+        <div class="popup-logo">
+            <i class="fas fa-network-wired"></i>
+        </div>
+        <div>
+            <h1 class="popup-title">NetTwist</h1>
+            <p class="popup-subtitle">HTTP İstek Yönetimi</p>
+        </div>
+    </div>
+    
+    <div class="card fade-in" style="animation-delay: 0.1s;">
+        <div class="card-header">
+            <h5><i class="fas fa-list-check me-2"></i>Aktif Kurallar</h5>
+        </div>
+        <div class="card-body">
+            <div id="rulesList">
+                <!-- Kurallar buraya dinamik olarak eklenecek -->
+                <div class="no-rules fade-in">
+                    <i class="fas fa-info-circle d-block"></i>
+                    <p>Henüz kural eklenmemiş</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer fade-in" style="animation-delay: 0.2s;">
+        <button id="openDashboard" class="btn btn-primary">
+            <i class="fas fa-sliders-h me-2"></i>Ayarları Aç
+        </button>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

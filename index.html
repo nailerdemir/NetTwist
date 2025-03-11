@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Response Modifier</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>HTTP İstek Değiştirici</h2>
+    <form id="responseModifierForm">
+        <div>
+            <label for="endpoint">Endpoint:</label>
+            <input type="text" id="endpoint" name="endpoint" required placeholder="örn: api/users">
+        </div>
+        
+        <div>
+            <label for="responseCode">Yanıt Kodu:</label>
+            <select id="responseCode" name="responseCode">
+                <option value="200">200 OK</option>
+                <option value="400">400 Bad Request</option>
+                <option value="401">401 Unauthorized</option>
+                <option value="403">403 Forbidden</option>
+                <option value="404">404 Not Found</option>
+                <option value="500">500 Internal Server Error</option>
+            </select>
+        </div>
+        
+        <button type="submit">Kaydet</button>
+    </form>
+    <div id="status" style="margin-top: 10px;"></div>
+    <script src="script.js"></script>
+</body>
+</html>

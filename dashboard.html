@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetTwist - HTTP İstek Yönetimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --danger-color: #f43f5e;
+            --warning-color: #fb923c;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-normal: all 0.3s ease;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            padding: 30px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1000px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: var(--transition-normal);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 16px 16px 0 0 !important;
+            padding: 20px 25px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: none;
+        }
+        
+        .card-header h3, .card-header h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .card-body {
+            padding: 30px;
+            background-color: white;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: var(--transition-normal);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+        
+        .input-group .form-control {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        .input-group .form-select {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .btn {
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: var(--transition-normal);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px -1px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #e11d48);
+            border: none;
+        }
+        
+        .btn-outline-danger {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-outline-warning {
+            color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+        
+        .btn-outline-warning:hover {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .alert-info {
+            background-color: white;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 16px 20px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: var(--transition-normal);
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        
+        .alert-info:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .bg-success {
+            background-color: var(--success-color) !important;
+        }
+        
+        .bg-danger {
+            background-color: var(--danger-color) !important;
+        }
+        
+        .bg-warning {
+            background-color: var(--warning-color) !important;
+        }
+        
+        .bg-info {
+            background-color: var(--accent-color) !important;
+        }
+        
+        .bg-secondary {
+            background-color: #94a3b8 !important;
+        }
+        
+        .help-text {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+        
+        .rule-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .rule-endpoint {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .rule-type-badge {
+            white-space: nowrap;
+        }
+        
+        .active-rules-container {
+            min-height: 50px;
+        }
+        
+        /* Bildirim stilleri */
+        .alert-dismissible {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 300px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Responsive iyileştirmeler */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .card-body {
+                padding: 20px;
+            }
+            .btn {
+                padding: 10px 16px;
+            }
+        }
+        
+        /* Buton container için stil */
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Animasyonlu geçişler */
+        .animated-element {
+            transition: var(--transition-normal);
+        }
+        
+        /* Özel scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Logo ve başlık stili */
+        .app-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .app-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 6px -1px rgba(67, 97, 238, 0.3);
+        }
+        
+        .app-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .app-subtitle {
+            color: #64748b;
+            margin: 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-header fade-in">
+            <div class="app-logo">
+                <i class="fas fa-network-wired"></i>
+            </div>
+            <div>
+                <h1 class="app-title">NetTwist</h1>
+                <p class="app-subtitle">HTTP İstek Yönetimi</p>
+            </div>
+        </div>
+        
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card fade-in" style="animation-delay: 0.1s;">
+                    <div class="card-header">
+                        <h3 class="mb-0"><i class="fas fa-sliders-h me-2"></i>İstek Ayarları</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="requestForm">
+                            <div class="mb-4">
+                                <label for="endpoint" class="form-label">
+                                    <i class="fas fa-link me-1"></i> İstek URL'i veya Endpoint
+                                </label>
+                                <input type="text" class="form-control" id="endpoint" required 
+                                       placeholder="Örnek: api/users veya https://api.example.com/users">
+                                <div class="help-text">İsteğin yakalanacağı URL veya endpoint'i belirtin</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="requestType" class="form-label">
+                                    <i class="fas fa-exchange-alt me-1"></i> İşlem Tipi
+                                </label>
+                                <select class="form-select" id="requestType" required>
+                                    <option value="modify">Yanıtı Değiştir</option>
+                                    <option value="block">İsteği Engelle</option>
+                                    <option value="redirect">Başka URL'e Yönlendir</option>
+                                </select>
+                                <div class="help-text">İstek için uygulanacak işlemi seçin</div>
+                            </div>
+
+                            <div id="redirectSettings" style="display: none;">
+                                <div class="mb-4">
+                                    <label for="redirectUrl" class="form-label">
+                                        <i class="fas fa-external-link-alt me-1"></i> Yönlendirilecek URL
+                                    </label>
+                                    <input type="text" class="form-control" id="redirectUrl" 
+                                           placeholder="Örnek: https://api.alternative.com/users">
+                                    <div class="help-text">İsteğin yönlendirileceği tam URL'i belirtin</div>
+                                </div>
+                            </div>
+
+                            <div id="responseSettings">
+                                <div class="mb-4">
+                                    <label for="responseCode" class="form-label">
+                                        <i class="fas fa-server me-1"></i> HTTP Yanıt Kodu
+                                    </label>
+                                    <select class="form-select" id="responseCode">
+                                        <option value="200">200 - Başarılı</option>
+                                        <option value="201">201 - Oluşturuldu</option>
+                                        <option value="400">400 - Hatalı İstek</option>
+                                        <option value="401">401 - Yetkisiz</option>
+                                        <option value="403">403 - Yasaklı</option>
+                                        <option value="404">404 - Bulunamadı</option>
+                                        <option value="500">500 - Sunucu Hatası</option>
+                                        <option value="503">503 - Servis Kullanılamıyor</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="customResponse" class="form-label">
+                                        <i class="fas fa-code me-1"></i> Özel Yanıt (JSON)
+                                    </label>
+                                    <textarea class="form-control" id="customResponse" rows="8" 
+                                              style="font-family: monospace; width: 100%; resize: vertical; min-height: 200px;"
+                                              placeholder='{"status": "success", "data": []}'></textarea>
+                                    <div class="help-text">Yanıt olarak gönderilecek JSON verisini belirtin</div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Aktif Kurallar</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="activeRules" class="active-rules-container">
+                            <!-- Rules will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mevcut CSS'e ekle -->
+                <style>
+                    .active-rules-container {
+                        min-height: 50px;
+                    }
+                    
+                    .alert-info {
+                        word-break: break-word;
+                        overflow-wrap: break-word;
+                    }
+                    
+                    .input-group .form-control {
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                    
+                    .input-group .form-select {
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+    <script src="dashboard.js" type="module"></script>
+</body>
+</html>
